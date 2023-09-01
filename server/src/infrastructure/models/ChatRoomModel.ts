@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import { Schema } from "mongoose";
 
 const messageSchema = new Schema({
   text: {
@@ -19,21 +19,19 @@ const userSchema = new Schema({
     validate: function (value: string) {
       const emailRegex = /^([\w-.]+@([\w-]+\.)+[\w-]{2,4})?$/;
       return emailRegex.test(value);
-    },
+    }
   },
   password: {
     type: String,
-    required: true,
+    required: true
   },
-  messages: [messageSchema],
-});
+  messages: [messageSchema]
+})
 
-const RoomSchema = new Schema({
+export const RoomSchema = new Schema({
   name: {
     type: String,
     unique: true
   },
-  users: [userSchema],
-});
-
-export const ChatRoomModel = mongoose.model("ChatRoom", RoomSchema)
+  users: [userSchema]
+})
