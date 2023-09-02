@@ -9,16 +9,13 @@ export interface IUser {
 }
 
 export class Room {
-    readonly id: string;
     readonly name: string;
     private _users: IUser[]
 
     constructor(
-        id: string,
         name: string,
-        users: IUser[]
+        users: IUser[],
     ) {
-        this.id = id;
         this.name = name;
         this._users = users;
     }
