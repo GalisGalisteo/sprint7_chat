@@ -54,34 +54,17 @@ export const createUser = async (
         })
 }
 
-export const addMessage = async (
+export const createMessage = async (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
-    if (!("text" in req.body)) {
-        return res.status(400).json({ Bad_reqest: "Text required" });
-    }
+    const user_id = req.params.user_id;
     const { text } = req.body;
-
-    const newMessage = new Message(text);
-
-    const addMessage = async (message: IMessage) => {
-        const newMessage = {
-            text: message.text,
-        }
-        const messageDB = await chatDocument.create(newMessage);
-        if (!messageDB) {
-            throw new Error("Can't create Room")
-        }
-        return messageDB.id;
+    try {
+        const responseFromDatabase = await userService.createMessage(text, user_id);
+        return res.status(200).json(responseFromDatabase);
+    } catch (err) {
+        next(err);
     }
-
-    addMessage(newMessage)
-        .then((response) => {
-            return res.status(201).json({ message_id: response });
-        })
-        .catch((err: Error) => {
-            next(err);
-        });
 }

@@ -1,11 +1,15 @@
+import { Model } from "mongoose";
 import { UserInterface } from "../application/UserInterface";
-import { User } from "../domain/User";
-import { chatDocument } from "../initDatabase";
-
+import { Message } from "../domain/Message";
+import { IUserMongoDB, User } from "../domain/User";
 
 export class UserMongoDBManager implements UserInterface {
+    private chatDocument: Model<IUserMongoDB>
+    constructor(chatDocument: Model<IUserMongoDB>) {
+        this.chatDocument = chatDocument
+    }
     async createUser(user: User): Promise<string> {
-        const nameEmailAlreadyExists = await chatDocument.findOne({
+        const nameEmailAlreadyExists = await this.chatDocument.findOne({
             $or: [
                 { email: user.email },
                 { name: user.name }
@@ -20,7 +24,7 @@ export class UserMongoDBManager implements UserInterface {
             password: user.password,
             messages: []
         }
-        const userDB = await chatDocument.create(newUser);
+        const userDB = await this.chatDocument.create(newUser);
         if (!userDB) {
             throw new Error("Can't create new user")
         }
@@ -28,11 +32,44 @@ export class UserMongoDBManager implements UserInterface {
     }
 
     async findUserByEmail(userEmail: string): Promise<User> {
-        const userDetails = await chatDocument.findOne({ email: userEmail });
+        const userDetails = await this.chatDocument.findOne({ email: userEmail });
         if (!userDetails) {
             throw new Error("EmailNotExists");
         }
-        const {name, email, password, messages, id} = userDetails;
+        const { name, email, password, messages, id } = userDetails;
         return new User(email, name, password, messages, id)
     }
+
+    async findUserById(user_id: string): Promise<User> {
+        const userDetails = await this.chatDocument.findById(user_id);
+        if (!userDetails) {
+            throw new Error("PlayerNotFound");
+        }
+        const { name, email, password, messages, id } = userDetails;
+        return new User(email, name, password, messages, id)
+    }
+
+    async createMessage(text: string, user_id: string): Promise<Message> {
+        const user = await this.findUserById(user_id);
+        const message = new Message(text);
+
+        await user.addNewMessage(message);
+
+
+        console.log("USER_AFTER_ADDED: ", user);
+
+        const response = await this.chatDocument.replaceOne(
+            { _id: { $eq: user.id } },
+            user
+        );
+
+        console.log("RESPONSE: ", response);
+
+        if (response.modifiedCount === 1) {
+            const lastMessage = user.messages[user.messages.length - 1];
+            return lastMessage;
+        }
+        throw new Error("AddingMessageError");
+    }
+
 }

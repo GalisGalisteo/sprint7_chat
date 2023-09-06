@@ -24,7 +24,8 @@ export class User {
     readonly email: string;
     readonly name: string;
     readonly password: string;
-    private _messages: IMessage[];
+    public messages: IMessage[];
+//    private _messages: IMessage[];
     readonly id?: string;
 
     constructor(
@@ -38,14 +39,14 @@ export class User {
         this.email = email;
         this.name = name;
         this.password = password;
-        this._messages = messages;
+        this.messages = messages;
     }
 
     public addNewMessage(message: Message) {
-        this._messages.push(message);
+        this.messages.push(message);
     }
 
-    public get messages() {
-        return this._messages;
-    }
+    // public get messages() {
+    //     return this._messages;
+    // }
 }

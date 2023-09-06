@@ -13,7 +13,7 @@ export let userService: UserInterface;
 export const initDataBase = async () => {
     const databaseConnection = connectDatabase(sanitizedConfig.MONGO_URI, sanitizedConfig.DATABASE);
     chatDocument = databaseConnection.model<IUserMongoDB>("User", userSchema);
-    const userMongoDBManager = new UserMongoDBManager();
+    const userMongoDBManager = new UserMongoDBManager(chatDocument);
     userService = new UserService(userMongoDBManager);
     return { chatDocument, userService };
 }
