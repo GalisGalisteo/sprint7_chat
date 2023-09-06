@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { chatDocument } from "../initDatabase";
+import { chatDocument, userService } from "../initDatabase";
 import { Message } from "../domain/Message";
 import { IMessage, IUser, User } from "../domain/User";
 import bcrypt from "bcrypt";
 
-export const addUser = async (
+export const createUser = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -18,20 +18,8 @@ export const addUser = async (
 
     const newUser = new User(email, name, hashedPassword, []);
 
-    const addUser = async (user: IUser) => {
-        const newUser = {
-            email: user.email,
-            name: user.name,
-            password: user.password,
-            messages: user.messages
-        }
-        const userDB = await chatDocument.create(newUser);
-        if (!userDB) {
-            throw new Error("Can't create new user")
-        }
-        return userDB.id;
-    }
-    addUser(newUser)
+    userService
+        .createUser(newUser)
         .then((response) => {
             return res.status(201).json({ user_id: response });
         })

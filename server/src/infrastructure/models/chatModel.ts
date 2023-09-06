@@ -9,12 +9,10 @@ const messageSchema = new Schema({
 
 export const userSchema = new Schema({
   name: {
-    type: String,
-    unique: true
+    type: String
   },
   email: {
     type: String,
-    unique: true,
     required: true,
     validate: function (value: string) {
       const emailRegex = /^([\w-.]+@([\w-]+\.)+[\w-]{2,4})?$/;
