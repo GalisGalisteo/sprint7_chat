@@ -26,4 +26,13 @@ export class UserMongoDBManager implements UserInterface {
         }
         return userDB.id;
     }
+
+    async findUserByEmail(userEmail: string): Promise<User> {
+        const userDetails = await chatDocument.findOne({ email: userEmail });
+        if (!userDetails) {
+            throw new Error("EmailNotExists");
+        }
+        const {name, email, password, messages, id} = userDetails;
+        return new User(email, name, password, messages, id)
+    }
 }

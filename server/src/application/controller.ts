@@ -3,6 +3,32 @@ import { chatDocument, userService } from "../initDatabase";
 import { Message } from "../domain/Message";
 import { IMessage, IUser, User } from "../domain/User";
 import bcrypt from "bcrypt";
+import sanitizedConfig from "../../config/config";
+import jwt from "jsonwebtoken";
+
+export const handleLogin = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const { email, password } = req.body;
+        const user = await userService.findUserByEmail(email);
+        if (!user) {
+            return res.status(401).json({ error: "no player found with this email" });
+        }
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
+            return res.status(401).json({ error: "authentication failed" });
+        }
+        const token = jwt.sign({ user_id: user.id }, sanitizedConfig.JWT_SECRET, {
+            expiresIn: "1h",
+        });
+        res.json({ token });
+    } catch (error) {
+        next(error);
+    }
+}
 
 export const createUser = async (
     req: Request,
@@ -27,8 +53,6 @@ export const createUser = async (
             next(err);
         })
 }
-
-
 
 export const addMessage = async (
     req: Request,
