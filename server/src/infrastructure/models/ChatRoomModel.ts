@@ -7,7 +7,7 @@ const messageSchema = new Schema({
   }
 })
 
-const userSchema = new Schema({
+export const userSchema = new Schema({
   name: {
     type: String,
     unique: true
@@ -26,12 +26,4 @@ const userSchema = new Schema({
     required: true
   },
   messages: [messageSchema]
-})
-
-export const RoomSchema = new Schema({
-  name: {
-    type: String,
-    unique: true
-  },
-  users: [userSchema]
 })

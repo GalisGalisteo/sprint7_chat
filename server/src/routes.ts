@@ -1,8 +1,8 @@
 import express from "express";
-import { createRoom } from "./application/controller";
+import { addUser } from "./application/controller";
 
 const router = express.Router();
 
-router.post("/new-room", createRoom);
+router.post("/user", addUser);
 
 export default router;
