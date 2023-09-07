@@ -69,5 +69,4 @@ export class UserMongoDBManager implements UserInterface {
         }
         throw new Error("AddingMessageError");
     }
-
 }

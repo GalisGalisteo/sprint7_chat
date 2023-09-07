@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { chatDocument, userService } from "../initDatabase";
-import { Message } from "../domain/Message";
-import { IMessage, IUser, User } from "../domain/User";
+import { userService } from "../initDatabase";
+import { User } from "../domain/User";
 import bcrypt from "bcrypt";
 import sanitizedConfig from "../../config/config";
 import jwt from "jsonwebtoken";
-import { io } from "../app";
+import { connectedClients } from "../Server";
 
 export const handleLogin = async (
     req: Request,
@@ -65,8 +64,9 @@ export const createMessage = async (
     try {
         const newMessage = await userService.createMessage(text, user_id);
 
-        io.emit("new-message", newMessage)
-
+        for (const client of connectedClients) {
+            client.send(JSON.stringify(newMessage));
+        }
         return res.status(200).json(newMessage);
     } catch (err) {
         next(err);
