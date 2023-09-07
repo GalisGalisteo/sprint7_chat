@@ -24,7 +24,7 @@ const authenticate = (
     req.userId = decodedToken.userId;
     next();
   } catch (error) {
-    if (error === "jwt expired") {
+    if (error === "jwtExpired") {
       next(error)
     }
     next(error);

@@ -16,7 +16,12 @@ export class UserMongoDBManager implements UserInterface {
             ]
         })
         if (nameEmailAlreadyExists) {
-            throw new Error("NameEmailConflictError");
+            if (nameEmailAlreadyExists.name = user.name)
+                throw new Error("NameConflictError");
+        }
+        if (nameEmailAlreadyExists) {
+            if (nameEmailAlreadyExists.email = user.email)
+                throw new Error("EmailConflictError");
         }
         const newUser = {
             email: user.email,
@@ -24,11 +29,12 @@ export class UserMongoDBManager implements UserInterface {
             password: user.password,
             messages: []
         }
-        const userDB = await this.chatDocument.create(newUser);
-        if (!userDB) {
-            throw new Error("Can't create new user")
+        try {
+            const userDB = await this.chatDocument.create(newUser);
+            return userDB.id;
+        } catch (err) {
+            throw err;
         }
-        return userDB.id;
     }
 
     async findUserByEmail(userEmail: string): Promise<User> {
@@ -43,7 +49,7 @@ export class UserMongoDBManager implements UserInterface {
     async findUserById(user_id: string): Promise<User> {
         const userDetails = await this.chatDocument.findById(user_id);
         if (!userDetails) {
-            throw new Error("PlayerNotFound");
+            throw new Error("UserNotFound");
         }
         const { name, email, password, messages, id } = userDetails;
         return new User(email, name, password, messages, id)
@@ -52,19 +58,11 @@ export class UserMongoDBManager implements UserInterface {
     async createMessage(text: string, user_id: string): Promise<Message> {
         const user = await this.findUserById(user_id);
         const message = new Message(text);
-
         await user.addNewMessage(message);
-
-
-        console.log("USER_AFTER_ADDED: ", user);
-
         const response = await this.chatDocument.replaceOne(
             { _id: { $eq: user.id } },
             user
         );
-
-        console.log("RESPONSE: ", response);
-
         if (response.modifiedCount === 1) {
             const lastMessage = user.messages[user.messages.length - 1];
             return lastMessage;

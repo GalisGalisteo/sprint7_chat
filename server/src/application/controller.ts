@@ -5,6 +5,7 @@ import { IMessage, IUser, User } from "../domain/User";
 import bcrypt from "bcrypt";
 import sanitizedConfig from "../../config/config";
 import jwt from "jsonwebtoken";
+import { io } from "../app";
 
 export const handleLogin = async (
     req: Request,
@@ -62,8 +63,11 @@ export const createMessage = async (
     const user_id = req.params.user_id;
     const { text } = req.body;
     try {
-        const responseFromDatabase = await userService.createMessage(text, user_id);
-        return res.status(200).json(responseFromDatabase);
+        const newMessage = await userService.createMessage(text, user_id);
+
+        io.emit("new-message", newMessage)
+
+        return res.status(200).json(newMessage);
     } catch (err) {
         next(err);
     }
