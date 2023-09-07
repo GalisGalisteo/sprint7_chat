@@ -1,5 +1,6 @@
 export class Message { 
     readonly text: string;
+    public sentDate: Date;
     readonly id?: string;
 
     constructor(
@@ -7,6 +8,7 @@ export class Message {
         id?: string
     ) {
         this.text = text;
+        this.sentDate = new Date();
         this.id = id;
     }
 }

@@ -4,7 +4,7 @@ import { User } from "../domain/User";
 import bcrypt from "bcrypt";
 import sanitizedConfig from "../../config/config";
 import jwt from "jsonwebtoken";
-import { connectedClients } from "../Server";
+import { io } from "../Server";
 
 export const handleLogin = async (
     req: Request,
@@ -24,7 +24,7 @@ export const handleLogin = async (
         const token = jwt.sign({ user_id: user.id }, sanitizedConfig.JWT_SECRET, {
             expiresIn: "1h",
         });
-        res.json({ token });
+        res.json({ token: token, name: user.name, id: user.id });
     } catch (error) {
         next(error);
     }
@@ -64,9 +64,8 @@ export const createMessage = async (
     try {
         const newMessage = await userService.createMessage(text, user_id);
 
-        for (const client of connectedClients) {
-            client.send(JSON.stringify(newMessage));
-        }
+        io.emit("new-message", newMessage)
+
         return res.status(200).json(newMessage);
     } catch (err) {
         next(err);

@@ -1,7 +1,8 @@
 import { Model } from "mongoose";
 import { UserInterface } from "../application/UserInterface";
 import { Message } from "../domain/Message";
-import { IUserMongoDB, User } from "../domain/User";
+import { IUserMongoDB } from "../domain/interfaces";
+import { User } from "../domain/User";
 
 export class UserMongoDBManager implements UserInterface {
     private chatDocument: Model<IUserMongoDB>

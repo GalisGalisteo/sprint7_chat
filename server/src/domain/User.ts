@@ -1,24 +1,5 @@
 import { Message } from "./Message";
-
-export interface IMessage {
-    text: string;
-}
-
-export interface IUser {
-    id: string;
-    email: string;
-    name: string;
-    password: string;
-    messages: IMessage[];
-}
-
-export interface IUserMongoDB {
-    _id: string;
-    email: string;
-    name: string;
-    password: string;
-    messages: IMessage[];
-  };
+import { IMessage } from "./interfaces";
 
 export class User {
     readonly email: string;

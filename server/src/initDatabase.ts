@@ -2,7 +2,7 @@ import { Model } from "mongoose";
 import sanitizedConfig from "../config/config";
 import { UserInterface } from "./application/UserInterface";
 import { UserService } from "./application/UserService";
-import { IUserMongoDB } from "./domain/User";
+import { IUserMongoDB } from "./domain/interfaces";
 import { userSchema } from "./infrastructure/models/chatModel";
 import { connectDatabase } from "./infrastructure/mongoDBConnection";
 import { UserMongoDBManager } from "./infrastructure/mongoDBManager";

@@ -4,7 +4,12 @@ const messageSchema = new Schema({
   text: {
     type: String,
     required: true
+  },
+  sentDate: {
+    type: Date,
+    required: true
   }
+
 })
 
 export const userSchema = new Schema({

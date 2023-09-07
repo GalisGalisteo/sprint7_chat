@@ -2,28 +2,24 @@ import sanitizedConfig from "../config/config";
 import { initDataBase } from "./initDatabase";
 import { app } from "./app";
 import http from "http";
-import { Server as WebSocketServer, WebSocket } from "ws";
+import { Server } from "socket.io";
 
 initDataBase();
 
-const httpServer = http.createServer(app);
-const wsServer = new WebSocketServer({ server: httpServer })
+export const server = http.createServer(app);
+export const io = new Server(server);
 
-httpServer.listen(sanitizedConfig.PORT, () => {
+server.listen(sanitizedConfig.PORT, () => {
     console.log(`Server is listening on port ${sanitizedConfig.PORT}:
     http://localhost:${sanitizedConfig.PORT}/ 🍄`);
 });
 
 export const connectedClients = new Set<WebSocket>();
 
-wsServer.on('connection', (socket) => {
+io.on('connection', (socket) => {
     console.log('A user connected');
 
     socket.on('disconnect', () => {
         console.log('A user disconnected');
-        connectedClients.delete(socket);
     });
-
-    connectedClients.add(socket);
-
-});
+})
