@@ -15,12 +15,11 @@ const Message: React.FC<Props> = ({ props }) => {
 	const backgroundColorClass = "bg-blue-200";
 	return (
 		<div className="card font-mono " key={props.id} >
-			<div className={`m-2 p-2 border-2 ${backgroundColorClass}`} key={props.id}>
-				<h3>{props.userName}</h3>
-				<p>Message: {props.text}</p>
-				<p>Date: {props.sentDate}</p>
-			</div>
-		</div >
+            <div className={`m-2 p-2 border-2 ${backgroundColorClass}`} key={props.id}>
+                <h3></h3>
+                <p><strong>{props.userName}</strong>: {props.text}</p>
+            </div>
+        </div >
 	)
 }
 export default Message;

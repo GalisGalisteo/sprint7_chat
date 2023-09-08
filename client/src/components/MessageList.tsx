@@ -1,5 +1,5 @@
 import { fetchMessages } from "../services";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Message, { IMessage } from "./Message";
 import io from "socket.io-client";
 import { PORT } from "../config/config"
@@ -7,6 +7,8 @@ import { PORT } from "../config/config"
 
 export const MessageList: React.FC = () => {
   const [messageList, setMessageList] = useState<IMessage[]>([]);
+  const messageListRef = useRef<HTMLDivElement | null>(null);
+
   const getMessageList = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -35,8 +37,17 @@ export const MessageList: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    // Scroll to the bottom whenever messageList updates
+    if (messageListRef.current) {
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+    }
+  }, [messageList]);
+
   return (
-    <div className="bg-blue-200 rounded-lg m-4 p-4 max-h-96 overflow-y-auto shadow-lg ">
+    <div className="bg-blue-200 rounded-lg m-4 p-4 max-h-96 overflow-y-auto shadow-lg"
+      ref={messageListRef}
+    >
       {messageList
         ? messageList.map((message: IMessage) => (
           <Message key={message.id} props={message} />

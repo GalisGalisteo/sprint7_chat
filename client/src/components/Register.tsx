@@ -91,7 +91,6 @@ const Register: React.FC = () => {
 						Name
 					</label>
 					<input
-						placeholder="Anonim"
 						onChange={(e) => setName(e.target.value)}
 						className="w-full p-2 border rounded-md focus:outline-none focus:border-blue-500"
 						type="text"
