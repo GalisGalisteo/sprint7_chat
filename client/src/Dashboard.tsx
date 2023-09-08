@@ -1,39 +1,18 @@
 import React, { useContext, useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
-import UserDataManipulation from "./components/UserDataManipulation";
-import { PlayerList } from "./components/PlayerList";
-import GetGameData from "./components/GetGameData";
-import GameList from "./components/GameList";
-import RankingList from "./components/RankingList";
-// TODO import jwt_decode from "jwt-decode";
-// TODO import { JwtPayload } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "./context/UserContext";
-
-
-export interface playerRanking {
-	name: string | null;
-	successRate: number;
-}
-export interface IRanking {
-	ranking: playerRanking[];
-	average: number;
-}
+import { MessageList } from "./components/MessageList";
+import SendMessage from "./components/SendMessage";
 
 interface DashboardProps {
 	setIsLoggedIn: (param: boolean) => void;
 }
 
 const Dashboard: React.FC<DashboardProps> = (props) => {
-	const [refreshGameList, setRefreshGameList] = useState(false);
-	const [refreshDashboard, setRefreshDashboard] = useState(false);
-	const [isRankingChoosen, setRankingChoosen] = useState(true);
-
-
 	const navigate = useNavigate();
-
-	const userContext = useContext(UserContext)
-
+	const userContext = useContext(UserContext);
+	const [refreshMessageList, setRefreshMessageList] = useState("1");
 
 	const logout = () => {
 		console.log("Logging out...");
@@ -43,66 +22,27 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
 		navigate("/")
 	};
 
-	/* Throttling navigation to prevent the browser from hanging. See https://crbug.com/1038223. Command line switch --disable-ipc-flooding-protection can be used to bypass the protection */
-
-	//one more condition to secure navigation to login if token not valid
-	// if (!userContext.isTokenValid) {
-	// 	navigate("/")
-	// }
-
 	useEffect(() => {
-
-    if (!userContext.isTokenValid) {
-      navigate("/")
-    }
-    
-		console.log("dashboard ref");
-		if (refreshGameList) {
-			setRefreshGameList(false);
+		if (!userContext.isTokenValid) {
+			navigate("/");
 		}
-		if (refreshDashboard) {
-			setRefreshDashboard(false);
-		}
-	}, [refreshGameList, refreshDashboard]);
-
-	// const token = localStorage.getItem("token");
+	}, [userContext.isTokenValid, navigate]);
 
 	const name = localStorage.getItem("name");
-
-	// TODO:
-	// if (token) {
-	//   const decodedToken: JwtPayload = jwt_decode(token);
-	//   const currentDate = new Date();
-	//   const tokenExpiration = decodedToken.exp ? decodedToken.exp : null;
-	//   if (tokenExpiration) {
-	//     if (tokenExpiration * 1000 < currentDate.getTime()) {
-	//       console.log("Token expired.");
-	//       props.setIsLoggedIn(false)
-	//     } else {
-	//       console.log("Valid token");
-	//     }
-	//   }
-	// }
 
 	return (
 		<div className="flex-col">
 			<>
 				<Navbar name={name} />
-				<div className="m-5  border-t-4 border-double border-emerald-950 flex max-h-360 ">
-					<UserDataManipulation setRefreshDashboard={setRefreshDashboard} refreshDashboard={refreshDashboard} />
-					{isRankingChoosen ? (
-						<RankingList
-							refreshDashboard={refreshDashboard}
-						/>
-					) : (
-						<PlayerList setIsRankingChoosen={setRankingChoosen} />
-					)}
-					<GetGameData
-						setRankingChoosen={setRankingChoosen}
-						setRefreshDashboard={setRefreshDashboard}
+				<div className="m-5  border-t-4 border-double border-emerald-950 flex-col">
+					<div className="bg-blue-300 rounded-lg m-4 p-4 max-h-100 overflow-y-auto shadow-lg">
+						Chat Messages
+						<MessageList key={refreshMessageList} />
+					</div>
+					<SendMessage
+						refreshMessageList={() => setRefreshMessageList(new Date().getTime().toString())}
 					/>
 				</div>
-				<GameList refreshGames={refreshGameList} />
 				<div>
 					<button
 						onClick={logout}

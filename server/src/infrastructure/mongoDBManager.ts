@@ -57,16 +57,13 @@ export class UserMongoDBManager implements UserInterface {
     async createMessage(text: string, user_id: string): Promise<Message> {
         const user = await this.findUserById(user_id);
         const message = await new Message(text, user.name);
-        console.log(message)
         await user.addNewMessage(message);
-        console.log("USER", user)
         const response = await this.chatDocument.replaceOne(
             { _id: { $eq: user.id } },
             user
         );
         if (response.modifiedCount === 1) {
             const lastMessage = user.messages[user.messages.length - 1];
-            console.log("LASTMESSAGE", lastMessage);
             return lastMessage;
         }
         throw new Error("AddingMessageError");

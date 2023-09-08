@@ -11,7 +11,7 @@ export interface RegistrationData {
 	password: string;
 }
 
-export async function fetchLogin(data: FormData) {
+export const fetchLogin = async (data: FormData) => {
 	const response = await fetch(`http://localhost:${PORT}/api/login`, {
 		method: 'POST',
 		headers: {
