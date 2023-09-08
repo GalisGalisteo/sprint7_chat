@@ -1,7 +1,7 @@
 import { Model } from "mongoose";
 import { UserInterface } from "../application/UserInterface";
 import { Message } from "../domain/Message";
-import { IUserMongoDB } from "../domain/interfaces";
+import { IMessageDB, IMessageUser, IUserMongoDB } from "../domain/interfaces";
 import { User } from "../domain/User";
 
 export class UserMongoDBManager implements UserInterface {
@@ -69,5 +69,22 @@ export class UserMongoDBManager implements UserInterface {
             return lastMessage;
         }
         throw new Error("AddingMessageError");
+    }
+
+    async getMessages(): Promise<Message[][]> {
+        const usersDB = await this.chatDocument.find({});
+
+        const users = usersDB.map((userDB) => {
+           const messages = userDB.messages.map((messageDB) => {
+            const message = new Message(
+                messageDB.text,
+                messageDB._id,
+            )
+            message.sentDate = messageDB.sentDate;
+            return message;
+           })
+           return messages;
+        })
+        return users
     }
 }
