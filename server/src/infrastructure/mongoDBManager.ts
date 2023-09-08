@@ -1,7 +1,7 @@
 import { Model } from "mongoose";
 import { UserInterface } from "../application/UserInterface";
 import { Message } from "../domain/Message";
-import { IMessageDB, IMessageUser, IUserMongoDB } from "../domain/interfaces";
+import { IUserMongoDB } from "../domain/interfaces";
 import { User } from "../domain/User";
 
 export class UserMongoDBManager implements UserInterface {
@@ -17,12 +17,10 @@ export class UserMongoDBManager implements UserInterface {
             ]
         })
         if (nameEmailAlreadyExists) {
-            if (nameEmailAlreadyExists.name = user.name)
-                throw new Error("NameConflictError");
-        }
-        if (nameEmailAlreadyExists) {
-            if (nameEmailAlreadyExists.email = user.email)
+            if (nameEmailAlreadyExists.email === user.email)
                 throw new Error("EmailConflictError");
+            if (nameEmailAlreadyExists.name === user.name)
+                throw new Error("NameConflictError");
         }
         const newUser = {
             email: user.email,
@@ -58,33 +56,39 @@ export class UserMongoDBManager implements UserInterface {
 
     async createMessage(text: string, user_id: string): Promise<Message> {
         const user = await this.findUserById(user_id);
-        const message = new Message(text);
+        const message = await new Message(text, user.name);
+        console.log(message)
         await user.addNewMessage(message);
+        console.log("USER", user)
         const response = await this.chatDocument.replaceOne(
             { _id: { $eq: user.id } },
             user
         );
         if (response.modifiedCount === 1) {
             const lastMessage = user.messages[user.messages.length - 1];
+            console.log("LASTMESSAGE", lastMessage);
             return lastMessage;
         }
         throw new Error("AddingMessageError");
     }
 
-    async getMessages(): Promise<Message[][]> {
+    async getMessages(): Promise<Message[]> {
         const usersDB = await this.chatDocument.find({});
 
-        const users = usersDB.map((userDB) => {
-           const messages = userDB.messages.map((messageDB) => {
-            const message = new Message(
-                messageDB.text,
-                messageDB._id,
-            )
-            message.sentDate = messageDB.sentDate;
-            return message;
-           })
-           return messages;
-        })
-        return users
+        const messages = usersDB.flatMap((userDB) =>
+            userDB.messages.map((messageDB) => {
+                const message = new Message(
+                    messageDB.text,
+                    messageDB.userName,
+                    messageDB._id
+                );
+                message.sentDate = messageDB.sentDate;
+                return message;
+            })
+        );
+        messages.sort((a, b) =>
+            a.sentDate.getTime() - b.sentDate.getTime()
+        );
+        return messages;
     }
 }

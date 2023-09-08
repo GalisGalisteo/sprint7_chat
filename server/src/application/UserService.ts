@@ -21,7 +21,7 @@ export class UserService {
         return this.userInterface.createMessage(text, user_id)
     }
 
-    getMessages(): Promise<Message[][]> {
+    getMessages(): Promise<Message[]> {
         return this.userInterface.getMessages()
     }
 }

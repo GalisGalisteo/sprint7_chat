@@ -8,6 +8,10 @@ const messageSchema = new Schema({
   sentDate: {
     type: Date,
     required: true
+  },
+  userName: {
+    type: String,
+    required: true
   }
 
 })

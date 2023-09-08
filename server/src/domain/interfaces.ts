@@ -18,17 +18,5 @@ export interface IMessage {
     _id?: string;
     text: string;
     sentDate: Date;
-}
-
-export interface IMessageDB {
-    _id: string;
-    text: string;
-    sentDate: Date;
-}
-
-export interface IMessageUser {
-    id: string;
-    text: string;
-    sentDate: Date;
     userName: string;
 }
