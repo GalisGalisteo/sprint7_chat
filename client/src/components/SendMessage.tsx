@@ -38,6 +38,12 @@ export const SendMessage: React.FC<SendMessageProps> = ({ refreshMessageList }) 
         placeholder="Write your message"
         value={inputField}
         onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault(); // Prevents the Enter key from adding a newline
+            handleSubmit(e);
+          }
+        }}
       />
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

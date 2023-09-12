@@ -38,7 +38,6 @@ export const MessageList: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Scroll to the bottom whenever messageList updates
     if (messageListRef.current) {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
     }
