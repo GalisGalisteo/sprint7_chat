@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import Login from './Login';
 import Dashboard from './Dashboard';
-import { fetchIsAuthenticated } from './services';
 import { UserContext } from './context/UserContext';
 
 function App() {
