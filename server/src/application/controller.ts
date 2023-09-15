@@ -5,6 +5,48 @@ import bcrypt from "bcrypt";
 import sanitizedConfig from "../../config/config";
 import jwt from "jsonwebtoken";
 import { io } from "../Server";
+import passport from "passport";
+import { Profile, Strategy, VerifyCallback } from "passport-google-oauth20";
+
+// export const GoogleLogin = passport.use(
+//     new Strategy(
+//         {
+//             clientID: sanitizedConfig.GOOGLE_CLIENT_ID,
+//             clientSecret: sanitizedConfig.GOOGLE_SECRET,
+//             callbackURL: `http://localhost:${sanitizedConfig.PORT}${sanitizedConfig.GOOGLE_REDIRECT_URL}`,
+//             passReqToCallback: true,
+//         },
+//         async (
+//             request: Request,
+//             accessToken: string,
+//             refreshToken: string,
+//             profile: Profile,
+//             done: (error: any, user?: any, info?: any) => void
+//         ) => {
+//             try {
+//                 if (profile._json.email && profile._json.name) {
+//                     const user = await userService.findUserByEmail(profile._json.email);
+//                     if (!user) {
+//                         const newUser = new User(
+//                             profile._json.email,
+//                             profile._json.name,
+//                             []
+//                         );
+//                         const response = await userService.createUser(newUser);
+//                         if (response) {
+//                             return done(null, response); // Pass the new user to Passport
+//                         }
+//                     }
+//                     return done(null, user); // Pass the existing user to Passport
+//                 } else {
+//                     return done(null, false, { message: "Missing email or name" });
+//                 }
+//             } catch (error) {
+//                 return done(error);
+//             }
+//         }
+//     )
+// );
 
 export const handleLogin = async (
     req: Request,
@@ -15,11 +57,13 @@ export const handleLogin = async (
         const { email, password } = req.body;
         const user = await userService.findUserByEmail(email);
         if (!user) {
-            return res.status(401).json({ error: "no player found with this email" });
+            return res.status(401).json({ error: "no user found with this email" });
         }
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch) {
-            return res.status(401).json({ error: "authentication failed" });
+        if (user.password) {
+            const passwordMatch = await bcrypt.compare(password, user.password);
+            if (!passwordMatch) {
+                return res.status(401).json({ error: "authentication failed" });
+            }
         }
         const token = jwt.sign({ user_id: user.id }, sanitizedConfig.JWT_SECRET, {
             expiresIn: "1h",
@@ -42,7 +86,7 @@ export const createUser = async (
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User(email, name, hashedPassword, []);
+    const newUser = new User(email, name, [], hashedPassword);
 
     userService
         .createUser(newUser)
@@ -76,15 +120,15 @@ export const getMessages = async (
     req: Request,
     res: Response,
     next: NextFunction
-  ) => {
+) => {
     userService
-      .getMessages()
-      .then((users) => {
-        if (users) {
-          return res.status(200).json(users);
-        }
-      })
-      .catch((err) => {
-        next(err);
-      });
-  };
+        .getMessages()
+        .then((users) => {
+            if (users) {
+                return res.status(200).json(users);
+            }
+        })
+        .catch((err) => {
+            next(err);
+        });
+};

@@ -13,8 +13,12 @@ export class UserService {
         return this.userInterface.createUser(userDetails);
     }
 
-    findUserByEmail(userEmail: string): Promise<User> {
+    findUserByEmail(userEmail: string): Promise<User | null> {
         return this.userInterface.findUserByEmail(userEmail);
+    }
+
+    findUserById(userId: string): Promise<User> {
+        return this.userInterface.findUserById(userId);
     }
 
     createMessage(text: string, user_id: string): Promise<Message> {

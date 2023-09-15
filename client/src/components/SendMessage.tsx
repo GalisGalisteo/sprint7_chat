@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { sendNewMessage } from "../services";
+import React, { useContext, useEffect, useState } from "react";
+import { fetchUserId, sendNewMessage } from "../services";
+import { UserContext } from "../context/UserContext";
 
 interface SendMessageProps {
   refreshMessageList: () => void;
@@ -7,13 +8,14 @@ interface SendMessageProps {
 
 export const SendMessage: React.FC<SendMessageProps> = ({ refreshMessageList }) => {
   const [inputField, setInputValue] = useState("");
-  const token = localStorage.getItem("token");
-  const user_id = localStorage.getItem("id");
+	const userContext = useContext(UserContext);
+
+  const user_id = userContext.user_id
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const response = await sendNewMessage(token, user_id, inputField);
+      const response = await sendNewMessage(user_id, inputField);
       if (response.ok) {
         const data = await response.json();
         refreshMessageList();

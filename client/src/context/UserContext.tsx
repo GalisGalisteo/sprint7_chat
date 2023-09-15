@@ -1,6 +1,4 @@
 import React, { createContext, useState, useEffect, Dispatch, SetStateAction } from 'react';
-import jwt_decode from "jwt-decode"
-
 
 type AuthUser = {
 	email: string;
@@ -9,54 +7,56 @@ type AuthUser = {
 }
 
 export type UserContextType = {
-	user: AuthUser | null;
-	setUser: Dispatch<SetStateAction<AuthUser | null>>;
-	isTokenValid: boolean
-	setIsTokenValid: Dispatch<SetStateAction<boolean>>;
+	user_id: string | null;
+	setUser_id:  Dispatch<SetStateAction<string | null>>;
+	//	setUser: Dispatch<SetStateAction<AuthUser | null>>;
+	//	isTokenValid: boolean
+	//	setIsTokenValid: Dispatch<SetStateAction<boolean>>;
 };
 
 type UserContextProviderType = {
 	children: React.ReactNode
 }
 
-interface DecodedToken {
-	userId: string;
-	iat: number;
-	exp: number;
-}
+// interface DecodedToken {
+// 	userId: string;
+// 	iat: number;
+// 	exp: number;
+// }
 
 
 export const UserContext = createContext({} as UserContextType)
 
 export const UserContextProvider = ({ children }: UserContextProviderType) => {
 
-	const [user, setUser] = useState<AuthUser | null>(null);
-	const [isTokenValid, setIsTokenValid] = useState<boolean>(false)
+	const [user_id, setUser_id] = useState<string | null>(null);
+	//	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
 
 	useEffect(() => {
-		console.log("veryfing token")
-		const token = localStorage.getItem("token")
-		if (!token) {
-			console.log("token not found")
-			setIsTokenValid(false)
-			return
-		}
-		if (token) {
-			const decodedToken: DecodedToken = jwt_decode(token)
-			const currentDate = new Date();
-			if (decodedToken.exp * 1000 < currentDate.getTime()) {
-				console.log("Token expired.");
-				setIsTokenValid(false)
-				localStorage.clear()
-			} else {
-				console.log("Valid token");
-				setIsTokenValid(true)
-				setUser({ email: "", token: token, id: decodedToken.userId })
-			}
+		const userDataCookie = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('userData='));
+
+		console.log('userDataCookie:', userDataCookie);
+
+		if (userDataCookie) {
+			const userDataValue = userDataCookie.split('=')[1];
+			console.log('userDataValue:', userDataValue);
+
+			// Decode the URL-encoded value
+			const decodedUserDataValue = decodeURIComponent(userDataValue);
+			console.log('decodedUserDataValue:', decodedUserDataValue);
+
+			// Parse the JSON string
+			const userData = JSON.parse(decodedUserDataValue);
+			console.log('userData:', userData);
+
+			setUser_id(userData);
 		}
 
-	}, [])
 
-	return <UserContext.Provider value={{ user, setUser, isTokenValid, setIsTokenValid }}>{children}</UserContext.Provider>
+	}, []);
+
+	return <UserContext.Provider value={{ user_id, setUser_id }}>{children}</UserContext.Provider>
 
 };

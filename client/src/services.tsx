@@ -11,6 +11,16 @@ export interface RegistrationData {
 	password: string;
 }
 
+export const fetchIsAuthenticated = async () => {
+	const response = await fetch(`http://localhost:${PORT}/api/auth/check-auth`, {
+		method: "GET",
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+	return response;
+}
+
 export async function fetchLogin(data: FormData) {
 	const response = await fetch(`http://localhost:${PORT}/api/login`, {
 		method: 'POST',
@@ -33,109 +43,35 @@ export const fetchRegistration = async (data: RegistrationData | null) => {
 	return response
 }
 
-export const fetchMessages = async (token: string | null) => {
+export const fetchMessages = async () => {
 	const response = await fetch(`http://localhost:${PORT}/api/messages`, {
-		method: "GET",
-		headers: {
-			Authorization: `Bearer ${token}`
-		}
+		method: "GET"
 	})
 	return response;
 }
-export const sendNewMessage = async (token: string | null, id: string | null, text: string | null) => {
+
+export const fetchUserId = async () => {
+	const response = await fetch(`http://localhost:${PORT}/api/callback`, {
+		method: "GET"
+	})
+	return response;
+}
+export const fetchIndex = async () => {
+	const response = await fetch(`http://localhost:${PORT}/`, {
+		method: "GET"
+	})
+	return response;
+}
+
+
+export const sendNewMessage = async (id: string | null, text: string | null) => {
 	const data = { text: text };
 	const response = await fetch(`http://localhost:${PORT}/api/message/${id}`, {
 		method: 'POST',
 		headers: {
-			Authorization: `Bearer ${token}`,
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify(data)
-	})
-	return response
-}
-
-
-////////
-
-export const fetchGameList = async (token: string | null, id: string | null) => {
-	const response = await fetch(`http://localhost:${PORT}/api/games/${id}`, {
-		method: "GET",
-		headers: {
-			Authorization: `Bearer ${token}`,
-
-		}
-	})
-	return response
-}
-
-export const fetchGetWinner = async (token: string | null) => {
-	const response = await fetch(`http://localhost:${PORT}/api/ranking/winner`, {
-		method: "GET",
-		headers: {
-			Authorization: `Bearer ${token}`,
-
-		}
-	})
-	return response
-}
-
-export const fetchGetLoser = async (token: string | null) => {
-	const response = await fetch(`http://localhost:${PORT}/api/ranking/loser`, {
-		method: "GET",
-		headers: {
-			Authorization: `Bearer ${token}`,
-
-		}
-	})
-	return response
-}
-
-
-export const changeName = async (token: string | null, id: string | null | undefined, newName: string) => {
-
-	const data = { name: newName }
-	console.log(JSON.stringify(data))
-	const response = await fetch(`http://localhost:${PORT}/api/players/${id}`, {
-		method: "PUT",
-		headers: {
-			Authorization: `Bearer ${token}`,
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(data)
-	})
-	return response
-}
-
-export const fetchPlayGame = async (token: string | null, id: string | null | undefined) => {
-	const response = await fetch(`http://localhost:${PORT}/api/games/${id}`, {
-		method: "POST",
-		headers: {
-			Authorization: `Bearer ${token}`,
-			'Content-Type': 'application/json'
-		},
-
-	})
-	return response
-}
-
-export const fetchDeleteGames = async (token: string | null, player_id: string | null | undefined) => {
-	const response = await fetch(`http://localhost:${PORT}/api/games/${player_id}`, {
-		method: "DELETE",
-		headers: {
-			Authorization: `Bearer ${token}`,
-		}
-	})
-	return response
-}
-
-export const fetchGetRanking = async (token: string | null) => {
-	const response = await fetch(`http://localhost:${PORT}/api/ranking/`, {
-		method: "GET",
-		headers: {
-			Authorization: `Bearer ${token}`,
-
-		}
 	})
 	return response
 }

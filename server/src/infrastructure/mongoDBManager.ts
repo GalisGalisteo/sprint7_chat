@@ -36,13 +36,14 @@ export class UserMongoDBManager implements UserInterface {
         }
     }
 
-    async findUserByEmail(userEmail: string): Promise<User> {
+    async findUserByEmail(userEmail: string): Promise<User | null> {
         const userDetails = await this.chatDocument.findOne({ email: userEmail });
         if (!userDetails) {
+           // return null
             throw new Error("EmailNotExists");
         }
         const { name, email, password, messages, id } = userDetails;
-        return new User(email, name, password, messages, id)
+        return new User(email, name, messages, password, id)
     }
 
     async findUserById(user_id: string): Promise<User> {
@@ -51,7 +52,7 @@ export class UserMongoDBManager implements UserInterface {
             throw new Error("UserNotFound");
         }
         const { name, email, password, messages, id } = userDetails;
-        return new User(email, name, password, messages, id)
+        return new User(email, name, messages, password, id)
     }
 
     async createMessage(text: string, user_id: string): Promise<Message> {
@@ -71,7 +72,6 @@ export class UserMongoDBManager implements UserInterface {
 
     async getMessages(): Promise<Message[]> {
         const usersDB = await this.chatDocument.find({});
-
         const messages = usersDB.flatMap((userDB) =>
             userDB.messages.map((messageDB) => {
                 const message = new Message(

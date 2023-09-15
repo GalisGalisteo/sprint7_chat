@@ -11,8 +11,7 @@ export const MessageList: React.FC = () => {
 
   const getMessageList = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetchMessages(token);
+      const response = await fetchMessages();
       if (response.ok) {
         const responseData = await response.json();
         setMessageList(responseData);

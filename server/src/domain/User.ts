@@ -4,7 +4,7 @@ import { IMessage } from "./interfaces";
 export class User {
     readonly email: string;
     readonly name: string;
-    readonly password: string;
+    readonly password?: string;
     public messages: IMessage[];
 //    private _messages: IMessage[];
     readonly id?: string;
@@ -12,8 +12,8 @@ export class User {
     constructor(
         email: string,
         name: string,
-        password: string,
         messages: IMessage[],
+        password?: string,
         id?: string
     ) {
         this.id = id;
