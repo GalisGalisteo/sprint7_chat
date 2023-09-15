@@ -21,7 +21,9 @@ passport.use(
             if (profile._json.email && profile._json.name) {
                 try {
                     const user = await userService.findUserByEmail(profile._json.email);
-                    return done(null, user?.id)
+                    if (user) {
+                        return done(null, user)
+                    }
                 } catch (err) {
                     if (err == "Error: EmailNotExists") {
                         const newUser = new User(

@@ -112,3 +112,7 @@ button {
  flex-grow: 1;
  padding-bottom: 1rem;
  }
+
+ .message-text {
+  word-wrap: break-word;
+}

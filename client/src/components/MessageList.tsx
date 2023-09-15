@@ -4,7 +4,6 @@ import Message, { IMessage } from "./Message";
 import io from "socket.io-client";
 import { PORT } from "../config/config"
 
-
 export const MessageList: React.FC = () => {
   const [messageList, setMessageList] = useState<IMessage[]>([]);
   const messageListRef = useRef<HTMLDivElement | null>(null);

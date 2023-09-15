@@ -1,5 +1,6 @@
 import { Message } from "../domain/Message";
 import { User } from "../domain/User";
+import { IUserMongoDB } from "../domain/interfaces";
 import { UserInterface } from "./UserInterface";
 
 
@@ -9,7 +10,7 @@ export class UserService {
         this.userInterface = userInterface;
     }
 
-    createUser(userDetails: User): Promise<string> {
+    createUser(userDetails: User): Promise<IUserMongoDB> {
         return this.userInterface.createUser(userDetails);
     }
 

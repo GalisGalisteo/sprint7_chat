@@ -9,7 +9,7 @@ export class UserMongoDBManager implements UserInterface {
     constructor(chatDocument: Model<IUserMongoDB>) {
         this.chatDocument = chatDocument
     }
-    async createUser(user: User): Promise<string> {
+    async createUser(user: User): Promise<IUserMongoDB> {
         const nameEmailAlreadyExists = await this.chatDocument.findOne({
             $or: [
                 { email: user.email },
@@ -30,7 +30,7 @@ export class UserMongoDBManager implements UserInterface {
         }
         try {
             const userDB = await this.chatDocument.create(newUser);
-            return userDB.id;
+            return userDB;
         } catch (err) {
             throw err;
         }
