@@ -1,7 +1,6 @@
 import React, { createContext, useState, useEffect, Dispatch, SetStateAction } from 'react';
 import jwt_decode from "jwt-decode"
 
-
 type AuthUser = {
 	email: string;
 	token?: string;

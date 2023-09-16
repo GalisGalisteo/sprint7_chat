@@ -76,15 +76,15 @@ export const getMessages = async (
     req: Request,
     res: Response,
     next: NextFunction
-  ) => {
+) => {
     userService
-      .getMessages()
-      .then((users) => {
-        if (users) {
-          return res.status(200).json(users);
-        }
-      })
-      .catch((err) => {
-        next(err);
-      });
-  };
+        .getMessages()
+        .then((users) => {
+            if (users) {
+                return res.status(200).json(users);
+            }
+        })
+        .catch((err) => {
+            next(err);
+        });
+};

@@ -40,7 +40,7 @@ export const SendMessage: React.FC<SendMessageProps> = ({ refreshMessageList }) 
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
-            e.preventDefault(); // Prevents the Enter key from adding a newline
+            e.preventDefault();
             handleSubmit(e);
           }
         }}

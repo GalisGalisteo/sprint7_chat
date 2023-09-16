@@ -2,7 +2,6 @@ import { Message } from "../domain/Message";
 import { User } from "../domain/User";
 import { UserInterface } from "./UserInterface";
 
-
 export class UserService {
     userInterface: UserInterface;
     constructor(userInterface: UserInterface) {

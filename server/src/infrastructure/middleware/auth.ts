@@ -29,7 +29,7 @@ const authenticate = (
     }
     next(error);
   }
-  
+
 };
 
 export default authenticate;

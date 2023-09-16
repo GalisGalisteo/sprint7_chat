@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Login from './Login';
 import Dashboard from './Dashboard';
 
-function App() {
+const App: React.FC = () => {
 
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 

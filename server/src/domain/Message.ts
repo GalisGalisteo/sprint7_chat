@@ -1,4 +1,4 @@
-export class Message { 
+export class Message {
     readonly text: string;
     public sentDate: Date;
     public userName: string;
