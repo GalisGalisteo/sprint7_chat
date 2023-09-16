@@ -6,7 +6,6 @@ export class User {
     readonly name: string;
     readonly password?: string;
     public messages: IMessage[];
-//    private _messages: IMessage[];
     readonly id?: string;
 
     constructor(
@@ -26,8 +25,4 @@ export class User {
     public addNewMessage(message: Message) {
         this.messages.push(message);
     }
-
-    // public get messages() {
-    //     return this._messages;
-    // }
 }

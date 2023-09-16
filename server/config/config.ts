@@ -13,6 +13,7 @@ interface ENV {
     GOOGLE_SECRET: string | undefined;
     GOOGLE_REDIRECT_URL: string | undefined;
     EXPRESS_SESSION_SECRET: string | undefined;
+    FRONT_PORT: string | undefined;
 }
 
 interface Config {
@@ -25,6 +26,7 @@ interface Config {
     GOOGLE_SECRET: string;
     GOOGLE_REDIRECT_URL: string;
     EXPRESS_SESSION_SECRET: string;
+    FRONT_PORT: string;
 }
 
 const getConfig = (): ENV => {
@@ -37,7 +39,8 @@ const getConfig = (): ENV => {
         GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
         GOOGLE_SECRET: process.env.GOOGLE_SECRET,
         GOOGLE_REDIRECT_URL: process.env.GOOGLE_REDIRECT_URL,
-        EXPRESS_SESSION_SECRET: process.env.EXPRESS_SESSION_SECRET
+        EXPRESS_SESSION_SECRET: process.env.EXPRESS_SESSION_SECRET,
+        FRONT_PORT: process.env.FRONT_PORT
     };
 };
 

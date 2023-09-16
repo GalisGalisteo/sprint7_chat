@@ -2,7 +2,10 @@ import { PORT } from "./config/config"
 
 export const fetchMessages = async () => {
 	const response = await fetch(`http://localhost:${PORT}/api/messages`, {
-		method: "GET"
+		method: "GET",
+		headers: {
+			'Authorization': 'Bearer ', // Send the OAuth token as an Authorization header
+		}
 	})
 	return response;
 }

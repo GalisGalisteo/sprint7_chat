@@ -28,14 +28,6 @@ export const errorHandler = (
     case "AddingMessageError":
       return response
         .status(500).send({ Error: "Error playing game" });
-    case "jwtExpired":
-      return response
-        .status(401)
-        .send({ Error: "Authentication required" });
-    case "NoToken":
-      return response
-        .status(401)
-        .send({ Error: "No token" });
     default:
       return response
         .status(500)

@@ -3,7 +3,6 @@ import { User } from "../domain/User";
 import { IUserMongoDB } from "../domain/interfaces";
 import { UserInterface } from "./UserInterface";
 
-
 export class UserService {
     userInterface: UserInterface;
     constructor(userInterface: UserInterface) {

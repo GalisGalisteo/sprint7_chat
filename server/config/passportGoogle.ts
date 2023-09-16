@@ -1,8 +1,8 @@
 import passport from "passport";
 import { Profile, Strategy, VerifyCallback } from "passport-google-oauth20";
-import sanitizedConfig from "../../config/config";
-import { userService } from "../initDatabase";
-import { User } from "../domain/User";
+import sanitizedConfig from "./config";
+import { userService } from "../src/initDatabase";
+import { User } from "../src/domain/User";
 
 passport.use(
     new Strategy({

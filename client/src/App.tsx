@@ -1,9 +1,9 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import Login from './Login';
 import Dashboard from './Dashboard';
 import { UserContext } from './context/UserContext';
 
-function App() {
+const App: React.FC = () => {
 	const { user_id } = useContext(UserContext);
 
 	return (
