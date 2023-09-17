@@ -20,8 +20,8 @@ const Message: React.FC<Props> = ({ props }) => {
     return (
         <div className="card font-mono " key={props.id} >
             <div className={`m-2 p-2 border-2 ${backgroundColorClass}`} key={props.id}>
-                <h3></h3>
-                <p><em>{time}</em>&nbsp;&nbsp;<strong>{props.userName}</strong>: {props.text}</p>
+                <p style={{ wordWrap: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>
+                    <em>{time}</em>&nbsp;&nbsp;<strong>{props.userName}</strong>: {props.text}</p>
             </div>
         </div >
     )

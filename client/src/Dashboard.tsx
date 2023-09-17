@@ -36,8 +36,9 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
 				<Navbar name={name} />
 				<div className="m-5  border-t-4 border-double border-emerald-950 flex-col">
 					<div className="bg-blue-300 rounded-lg m-4 p-4 max-h-100 overflow-y-auto shadow-lg">
-						Chat Messages
-						<MessageList key={refreshMessageList} />
+					<h2 style={{ fontSize: "24px", fontWeight: "bold" }}>
+							Chat Messages
+						</h2>						<MessageList key={refreshMessageList} />
 					</div>
 					<SendMessage
 						refreshMessageList={() => setRefreshMessageList(new Date().getTime().toString())}
