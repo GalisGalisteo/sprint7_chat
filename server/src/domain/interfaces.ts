@@ -6,6 +6,13 @@ export interface IUser {
     messages: IMessage[];
 }
 
+export interface IMessage {
+    _id?: string;
+    text: string;
+    sentDate: Date;
+    userName: string;
+}
+
 export interface IUserMongoDB {
     _id: string;
     email: string;
@@ -14,9 +21,10 @@ export interface IUserMongoDB {
     messages: IMessage[];
 };
 
-export interface IMessage {
+
+export interface IRoomMongoDB {
     _id?: string;
-    text: string;
-    sentDate: Date;
-    userName: string;
+    name: string;
+    userCreatorId: string;
+    users: IUserMongoDB[];
 }

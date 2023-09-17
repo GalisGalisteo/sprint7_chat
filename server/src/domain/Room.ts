@@ -2,18 +2,18 @@ import { User } from "./User";
 
 export class Room {
     readonly name: string;
-    public userCreator: User;
+    public userCreatorId: string;
     public users: User[];
     readonly id?: string;
 
     constructor(
         name: string,
-        userCreator: User,
+        userCreatorId: string,
         users: User[],
         id?: string
     ) {
         this.name = name;
-        this.userCreator = userCreator;
+        this.userCreatorId = userCreatorId;
         this.users = users;
         this.id = id;
     }

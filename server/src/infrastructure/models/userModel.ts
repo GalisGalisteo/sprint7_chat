@@ -13,7 +13,6 @@ const messageSchema = new Schema({
     type: String,
     required: true
   }
-
 })
 
 export const userSchema = new Schema({
